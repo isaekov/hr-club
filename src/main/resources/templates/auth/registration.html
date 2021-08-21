@@ -4,9 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>AdminLTE 3 | Registration Page (v2)</title>
-
-
-
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"  href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" th:href="@{/plugins/fontawesome-free/css/all.min.css}">
@@ -60,7 +57,7 @@
                         <div class="icheck-primary">
                             <input type="checkbox" id="agreeTerms" name="terms" value="agree">
                             <label for="agreeTerms">
-                                I agree to the <a href="#">terms</a>
+                                Я согласен с <a href="#">условиями</a>
                             </label>
                         </div>
                     </div>
@@ -72,8 +69,10 @@
                 </div>
             </form>
 
-
-            <a href="login.html" class="text-center">У меня уже есть аккунт</a>
+            <a href="/auth/login" class="text-center">У меня уже есть аккунт</a>
+            <p class="mb-0">
+                <a href="register.html" class="text-center">Забыл пароль</a>
+            </p>
         </div>
         <!-- /.form-box -->
     </div><!-- /.card -->

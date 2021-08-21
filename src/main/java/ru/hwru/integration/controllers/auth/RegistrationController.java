@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.hwru.integration.dto.UserRegistration;
-import ru.hwru.integration.service.UserService;
+import ru.hwru.integration.service.auth.UserService;
 
 @Controller
 @RequestMapping("/auth")

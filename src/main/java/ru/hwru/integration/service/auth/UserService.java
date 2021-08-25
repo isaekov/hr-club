@@ -7,5 +7,7 @@ import ru.hwru.integration.entity.User;
 
 @Service
 public interface UserService extends UserDetailsService {
+
+    User getCurrentUser();
     User save(UserRegistration userRegistration);
 }

@@ -1,5 +1,6 @@
 package ru.hwru.integration.controllers.home;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import ru.hwru.integration.dto.FileInfo;
 import ru.hwru.integration.dto.upload.ResponseMessage;
+import ru.hwru.integration.service.auth.UserService;
 import ru.hwru.integration.service.upload.FileStorageService;
 
 import java.util.List;
@@ -23,6 +25,8 @@ public class FileUploadController {
 
     private final FileStorageService fileStorageService;
 
+//    @Autowired
+//    private final UserService userService;
 
     public FileUploadController(FileStorageService fileStorageService) {
         this.fileStorageService = fileStorageService;
@@ -42,7 +46,7 @@ public class FileUploadController {
             message = "Uploaded the file successfully: " + file.getOriginalFilename();
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } catch (Exception e) {
-            message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+            message = "Could not upload the file: " + file.getOriginalFilename() + e.getMessage() + "!";
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
         }
     }

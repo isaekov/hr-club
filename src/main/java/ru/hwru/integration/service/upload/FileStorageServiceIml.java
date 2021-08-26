@@ -62,6 +62,7 @@ public class FileStorageServiceIml implements FileStorageService {
     @Override
     public Resource load(String filename) {
         try {
+            Path root = Paths.get("uploads/"+userService.getCurrentUser().getId());
             Path file = root.resolve(filename);
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
@@ -92,7 +93,7 @@ public class FileStorageServiceIml implements FileStorageService {
     private File prepareNameUserFile(MultipartFile file) {
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
         return new File(
-                userService.getCurrentUser().getId(),
+                userService.getCurrentUser(),
                 file.getOriginalFilename(),
                 UUID.randomUUID() + "." + extension,
                 extension
@@ -100,7 +101,7 @@ public class FileStorageServiceIml implements FileStorageService {
     }
 
     private void saveDiskFile(File prepareFile, MultipartFile file) throws Exception {
-        java.io.File directory = new java.io.File("uploads/" + prepareFile.getUserId());
+        java.io.File directory = new java.io.File("uploads/" + prepareFile.getUser().getId());
         if (!directory.exists()) {
             if (directory.mkdir()) {
                 throw new NotDirectoryException("Ошбика при создание директории ");

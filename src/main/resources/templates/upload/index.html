@@ -10,5 +10,14 @@
     <input type="file" name="file" >
     <input type="submit" value="send">
 </form>
+
+
+
+<div th:each="file : ${files.files}">
+    <a th:href="'file/files/' + ${file.generateName}" th:text="${file.originName}"></a>
+</div>
+
+
+
 </body>
 </html>

@@ -3,13 +3,10 @@ package ru.hwru.integration.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-@Data
-@NoArgsConstructor
 @Entity
 public class File {
 
@@ -17,7 +14,10 @@ public class File {
     @GeneratedValue
     private Long id;
 
-    private Long userId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     private String originName;
 
@@ -25,10 +25,51 @@ public class File {
 
     private String extension;
 
-    public File(Long userId, String originName, String generateName, String extension) {
-        this.userId = userId;
+    public File(User user, String originName, String generateName, String extension) {
+        this.user = user;
         this.originName = originName;
         this.generateName = generateName;
+        this.extension = extension;
+    }
+
+    public File(){}
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getOriginName() {
+        return originName;
+    }
+
+    public void setOriginName(String originName) {
+        this.originName = originName;
+    }
+
+    public String getGenerateName() {
+        return generateName;
+    }
+
+    public void setGenerateName(String generateName) {
+        this.generateName = generateName;
+    }
+
+    public String getExtension() {
+        return extension;
+    }
+
+    public void setExtension(String extension) {
         this.extension = extension;
     }
 }

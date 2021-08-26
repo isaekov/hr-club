@@ -1,14 +1,13 @@
 package ru.hwru.integration.service.upload;
 
-import lombok.AllArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
+
 import ru.hwru.integration.entity.File;
-import ru.hwru.integration.entity.User;
 import ru.hwru.integration.repository.FileRepository;
 import ru.hwru.integration.service.auth.UserService;
 
@@ -16,10 +15,7 @@ import ru.hwru.integration.service.auth.UserService;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -27,8 +23,6 @@ import java.util.stream.Stream;
 @Transactional
 public class FileStorageServiceIml implements FileStorageService {
 
-
-    private String path = "uploads";
 
     private final Path root = Paths.get("uploads");
 
@@ -49,44 +43,20 @@ public class FileStorageServiceIml implements FileStorageService {
         }
     }
 
+    /**
+     * Сохраняет файл на диск, и хранит реальное имя в базе
+     */
     @Override
     public void save(MultipartFile file) {
         try {
-            User user = userService.getCurrentUser();
-
-
-
-
-            java.io.File file1 = new java.io.File(path+"/"+user.getId());
-
-            if (!file1.exists()) {
-                file1.mkdir();
-            }
-            System.out.println(path+"/"+user.getId());
-                    String generateFilename = UUID.randomUUID().toString();
-                    String originalFilename = Objects.requireNonNull(file.getOriginalFilename());
-
-
-                    fileRepository.save(new File(
-                            user.getId(),
-                            originalFilename,
-                            generateFilename,
-                            FilenameUtils.getExtension(originalFilename)
-                    ));
-                    Files.copy(file.getInputStream(), Paths.get(path+"/"+user.getId()).resolve(generateFilename),
-                            StandardCopyOption.REPLACE_EXISTING);
-
-
-
+            File prepareFile = prepareNameUserFile(file);
+            saveDiskFile(prepareFile, file);
+            fileRepository.save(prepareFile);
 
         } catch (Exception e) {
             throw new RuntimeException("Не удалось сохранить файл. Ошибка: " + e.getMessage());
         }
-
     }
-
-
-
 
 
     @Override
@@ -116,5 +86,31 @@ public class FileStorageServiceIml implements FileStorageService {
         } catch (IOException e) {
             throw new RuntimeException("Could not load the files!");
         }
+    }
+
+
+    private File prepareNameUserFile(MultipartFile file) {
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        return new File(
+                userService.getCurrentUser().getId(),
+                file.getOriginalFilename(),
+                UUID.randomUUID() + "." + extension,
+                extension
+        );
+    }
+
+    private void saveDiskFile(File prepareFile, MultipartFile file) throws Exception {
+        java.io.File directory = new java.io.File("uploads/" + prepareFile.getUserId());
+        if (!directory.exists()) {
+            if (directory.mkdir()) {
+                throw new NotDirectoryException("Ошбика при создание директории ");
+            }
+        }
+        Files.copy(
+                file.getInputStream(),
+                Paths.get(directory.getPath())
+                        .resolve(prepareFile.getGenerateName()),
+                StandardCopyOption.REPLACE_EXISTING
+        );
     }
 }

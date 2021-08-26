@@ -1,4 +1,4 @@
-package ru.hwru.integration.controllers.home;
+package ru.hwru.integration.controllers.upload;
 
 import org.springframework.core.io.Resource;;
 import org.springframework.http.HttpHeaders;
@@ -11,14 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import ru.hwru.integration.dto.FileInfo;
 import ru.hwru.integration.dto.upload.ResponseMessage;
-import ru.hwru.integration.entity.File;
 import ru.hwru.integration.entity.User;
 import ru.hwru.integration.repository.UserRepository;
 import ru.hwru.integration.service.auth.UserService;
 import ru.hwru.integration.service.upload.FileStorageService;
-
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 

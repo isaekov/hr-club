@@ -68,7 +68,7 @@ public class FileStorageServiceIml implements FileStorageService {
             if (resource.exists() || resource.isReadable()) {
                 return resource;
             } else {
-                throw new RuntimeException("Could not read the file!");
+                throw new RuntimeException("Не удалось прочитать файл!");
             }
         } catch (MalformedURLException e) {
             throw new RuntimeException("Ошибка: " + e.getMessage());

@@ -5,10 +5,10 @@
     <div class="sidebar">
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon far fa-circle text-info"></i>
-                        <p>Informational</p>
+                <li class="nav-item" th:each="path : ${settings}" >
+                    <a th:href="${path.path}" th:title="${path.title}"  class="nav-link">
+                        <i class="nav-icon far fa-circle" th:style="'color:' + ${path.color}"></i>
+                        <p  th:text="${path.name}"></p>
                     </a>
                 </li>
             </ul>

@@ -26,7 +26,7 @@ public class AppPath {
     @ColumnDefault("0")
     private boolean isUse;
 
-    private String icon;
+    private int parentId;
 
     public AppPath() {}
 
@@ -78,11 +78,11 @@ public class AppPath {
         isUse = use;
     }
 
-    public String getIcon() {
-        return icon;
+    public int getParentId() {
+        return parentId;
     }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
+    public void setParentId(int icon) {
+        this.parentId = icon;
     }
 }

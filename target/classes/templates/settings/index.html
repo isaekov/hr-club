@@ -22,14 +22,14 @@
 </th:block>
 
 <th:block layout:fragment="content">
-    <div class="card card-danger">
+    <div class="card card-light">
         <div class="card-header">
             <h3 class="card-title">Different Width</h3>
         </div>
         <div class="card-body">
             <form action="#" th:action="@{/settings}" th:object="${appPath}" method="post">
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-2">
                         <label>Аттрибуты</label>
                         <input type="text" class="form-control" th:field="*{title}">
                     </div>
@@ -44,12 +44,14 @@
                         <input type="text" class="form-control" th:field="*{path}">
                     </div>
                     <div class="col-1">
-                        <label>Цвет</label>
-                        <input type="color" class="form-control" th:field="*{color}">
-                    </div>
-                    <div class="col-1">
                         <label>Актив</label>
-                        <input type="checkbox" class="form-control" th:checked="*{isUse}">
+                        <input type="checkbox" class="form-control" th:field="*{isUse}" th:checked="*{isUse}">
+                    </div>
+                    <div class="col-3">
+                        <label>Родитель</label>
+                        <select th:field="*{parentId}"  class="form-control" >
+                            <option th:each="i : ${pathList}" th:value="${i.id}" th:text="${i.name}"></option>
+                        </select>
                     </div>
 
                     <div class="col-2">

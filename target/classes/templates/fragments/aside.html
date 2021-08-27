@@ -4,12 +4,18 @@
     </a>
     <div class="sidebar">
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <li class="nav-item" th:each="path : ${settings}" >
-                    <a th:href="${path.path}" th:title="${path.title}"  class="nav-link">
-                        <i class="nav-icon far fa-circle" th:style="'color:' + ${path.color}"></i>
-                        <p  th:text="${path.name}"></p>
-                    </a>
+            <ul class="nav nav-pills nav-sidebar">
+                <li class="" th:each="path : ${settings}">
+                    <div class="row">
+                        <i class="fas fa-ellipsis-v mt-2"></i>
+                        <a th:href="${path.path}" th:title="${path.title}" class="nav-link">
+                            <!--                        <i class="fas fa-ellipsis-v left"></i>-->
+<!--                            <i class="nav-icon far fa-circle" th:style="'color:' + ${path.color}"></i>-->
+<!--                            <p>-->
+                                <th:block th:utext="${path.name}"/>
+<!--                            </p>-->
+                        </a>
+                    </div>
                 </li>
             </ul>
         </nav>

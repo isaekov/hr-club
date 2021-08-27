@@ -26,7 +26,6 @@ public class SettingsController {
     public String index(Model model) {
         model.addAttribute("pathList", appPathRepository.findAll());
         model.addAttribute("appPath", new AppPath());
-
         return "settings/index";
     }
 

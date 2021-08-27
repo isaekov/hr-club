@@ -4,7 +4,6 @@
       layout:decorate="~{layout/layout}"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 
-
 <th:block layout:fragment="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -24,59 +23,43 @@
 <th:block layout:fragment="content">
     <div class="card card-light">
         <div class="card-header">
-            <h3 class="card-title">Здесь можно прописать пути</h3>
+            <h3 class="card-title">Обновление ссылок</h3>
         </div>
         <div class="card-body">
-
-            <form action="#" th:action="@{/settings/path}" th:object="${appPath}" method="post">
+            <form th:action="@{'/settings/path/update/'+${id}}" th:object="${path}" method="post">
                 <div class="row">
+                    <div class="col-2">
+                        <label>Аттрибуты</label>
+                        <input type="text" class="form-control form-control-sm" th:field="*{title}">
+                    </div>
 
-                    <div class="col-3">
+                    <div class="col-2">
                         <label>Названия</label>
                         <input type="text" class="form-control form-control-sm" th:field="*{name}">
                     </div>
 
-                    <div class="col-3">
+                    <div class="col-2">
                         <label>Путь</label>
                         <input type="text" class="form-control form-control-sm" th:field="*{path}">
                     </div>
+                    <div class="col-1">
+                        <label>Актив</label>
+                        <input type="checkbox" class="form-control form-control-sm" th:checked="*{isUse}">
+                    </div>
+
                     <div class="col-3">
                         <label>Родитель</label>
                         <select th:field="*{parentId}" class="form-control form-control-sm">
-                            <option value="0">Выберите</option>
                             <option th:each="i : ${pathList}" th:value="${i.id}" th:text="${i.name}"></option>
                         </select>
                     </div>
-                    <div class="col-3">
-                        <label>Сохранить</label>
+
+                    <div class="col-2">
+                        <label>Обновить</label>
                         <input type="submit" class="form-control form-control-sm" value="Сохранить">
                     </div>
                 </div>
             </form>
-
-            <hr>
-
-            <table class="table table-bordered table-sm">
-                <thead>
-                <tr>
-                    <th>Названия</th>
-                    <th>Путь</th>
-                    <th>Родитель</th>
-                    <th>Действие</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="path : ${pathList}">
-                    <td class="col-2" th:text="${path.name}"></td>
-                    <td class="col-2" th:text="${path.path}"></td>
-                    <td class="col-2"></td>
-                    <td class="col-1 text-center">
-                        <a th:href="'path/edit/'+${path.id}" class="btn-sm btn btn-secondary">Редактировать</a>
-                        <a th:href="'path/delete/'+${path.id}" class="btn-sm btn btn-danger">Удалить</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
         </div>
     </div>
 </th:block>

@@ -2,10 +2,9 @@ package ru.hwru.integration.controllers.settings;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import ru.hwru.integration.entity.AppPath;
 import ru.hwru.integration.repository.AppPathRepository;
 import ru.hwru.integration.service.settings.PathService;
@@ -22,18 +21,46 @@ public class SettingsController {
         this.pathService = pathService;
     }
 
-    @GetMapping
+    @GetMapping("/path")
     public String index(Model model) {
         model.addAttribute("pathList", appPathRepository.findAll());
         model.addAttribute("appPath", new AppPath());
         return "settings/index";
     }
 
-    @PostMapping
+    @PostMapping("/path")
     public String appPathSubmit(@ModelAttribute AppPath appPath) {
-
         pathService.save(appPath);
         return "redirect:/settings";
     }
+
+    @GetMapping("/path/edit/{id}")
+    public String showUpdateForm(@PathVariable("id") int id, Model model) {
+        AppPath path = appPathRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid path id: " + id));
+        model.addAttribute("pathList", appPathRepository.findAll());
+        model.addAttribute("path", path);
+        return "settings/path-update";
+    }
+
+    @PostMapping("/path/update/{id}")
+    public String updateForm(@PathVariable("id") int id, @Validated AppPath path, BindingResult result) {
+        if (result.hasErrors()) {
+            path.setId(id);
+            return "settings/path-update";
+        }
+        appPathRepository.save(path);
+        return "redirect:/settings/path";
+    }
+
+    @PostMapping("/path/delete/{id}")
+    public String delete(@PathVariable("id") int id) {
+        AppPath path = appPathRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid path Id:" + id));
+        appPathRepository.delete(path);
+        return "redirect:/settings/path";
+    }
+
+
 
 }

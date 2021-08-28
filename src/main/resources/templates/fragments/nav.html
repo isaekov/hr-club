@@ -2,7 +2,7 @@
     <!-- Left navbar links -->
     <ul class="navbar-nav">
         <li class="nav-item dropdown" th:each="path : ${settings}" th:if="path.value">
-            <a href="#"  th:id="'dropdown'+${path.key.id}" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a href="#"  th:id="'dropdown'+${path.key.id}" class="nav-link dropdown-toggle border-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <th:block th:utext="${path.key.name}"/>
             </a>
 

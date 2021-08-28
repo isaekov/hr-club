@@ -9,6 +9,8 @@ import ru.hwru.integration.entity.AppPath;
 import ru.hwru.integration.repository.AppPathRepository;
 import ru.hwru.integration.service.settings.PathService;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/settings")
 public class SettingsController {
@@ -23,15 +25,17 @@ public class SettingsController {
 
     @GetMapping("/path")
     public String index(Model model) {
-        model.addAttribute("pathList", appPathRepository.findAll());
+        List<AppPath> appPathList = appPathRepository.findAll();
+        model.addAttribute("pathList", appPathList);
         model.addAttribute("appPath", new AppPath());
+        model.addAttribute("parent", pathService.getParent(appPathList));
         return "settings/index";
     }
 
     @PostMapping("/path")
     public String appPathSubmit(@ModelAttribute AppPath appPath) {
         pathService.save(appPath);
-        return "redirect:/settings";
+        return "redirect:/settings/path";
     }
 
     @GetMapping("/path/edit/{id}")
@@ -53,7 +57,7 @@ public class SettingsController {
         return "redirect:/settings/path";
     }
 
-    @PostMapping("/path/delete/{id}")
+    @GetMapping("/path/delete/{id}")
     public String delete(@PathVariable("id") int id) {
         AppPath path = appPathRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid path Id:" + id));

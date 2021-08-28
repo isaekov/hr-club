@@ -54,11 +54,12 @@
                 </div>
             </form>
 
-            <hr>
+            <hr class="bg-gradient-gray">
 
             <table class="table table-bordered table-sm">
-                <thead>
+                <thead class="bg-gradient-gray">
                 <tr>
+                    <th>ID</th>
                     <th>Названия</th>
                     <th>Путь</th>
                     <th>Родитель</th>
@@ -67,12 +68,12 @@
                 </thead>
                 <tbody>
                 <tr th:each="path : ${pathList}">
+                    <td class="col-sm-1" th:text="${path.id}"></td>
                     <td class="col-2" th:text="${path.name}"></td>
                     <td class="col-2" th:text="${path.path}"></td>
-                    <td class="col-2">
-                        <span th:each="l : ${pathList}" th:if="l.id == path.id" th:text="path.name"></span>
+                    <td class="col-2" th:text="${parent.get(path.id)}">
                     </td>
-                    <td class="col-1 text-center">
+                    <td class="col-2 text-center">
                         <a th:href="'path/edit/'+${path.id}" class="btn-sm btn btn-secondary">Редактировать</a>
                         <a th:href="'path/delete/'+${path.id}" class="btn-sm btn btn-danger">Удалить</a>
                     </td>

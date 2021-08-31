@@ -64,7 +64,6 @@ public class AdvanceController {
     public Map<String, String> list() {
         Map<String, String > map = new LinkedHashMap<>();
         appPathRepository.findAll().forEach(v -> {
-            System.out.println(v.getPath());
             map.put(v.getPath(), v.getName());
         });
         return map;

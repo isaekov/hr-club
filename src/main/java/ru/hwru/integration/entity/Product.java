@@ -1,7 +1,11 @@
 package ru.hwru.integration.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Product {
@@ -20,11 +24,25 @@ public class Product {
     @JoinColumn(name = "category_id")
     private ProductCategory category;
 
+    public Set<MonthListProduct> getMonthListProducts() {
+        return monthListProducts;
+    }
+
+    public void setMonthListProducts(Set<MonthListProduct> monthListProducts) {
+        this.monthListProducts = monthListProducts;
+    }
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<MonthListProduct> monthListProducts = new HashSet<>();
+
     public Product(String name, int price, ProductCategory category) {
         this.name = name;
         this.price = price;
         this.category = category;
     }
+
+
 
     public Product() {}
 

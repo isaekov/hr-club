@@ -53,7 +53,7 @@ public class SettingsController {
         return "redirect:/settings/path";
     }
 
-    @PostMapping("/path/delete/{id}")
+    @GetMapping("/path/delete/{id}")
     public String delete(@PathVariable("id") int id) {
         AppPath path = appPathRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid path Id:" + id));

@@ -28,23 +28,15 @@
         <div class="card-body">
             <form th:action="@{'/settings/path/update/'+${id}}" th:object="${path}" method="post">
                 <div class="row">
-                    <div class="col-2">
-                        <label>Аттрибуты</label>
-                        <input type="text" class="form-control form-control-sm" th:field="*{title}">
-                    </div>
 
                     <div class="col-2">
                         <label>Названия</label>
                         <input type="text" class="form-control form-control-sm" th:field="*{name}">
                     </div>
 
-                    <div class="col-2">
+                    <div class="col-3">
                         <label>Путь</label>
                         <input type="text" class="form-control form-control-sm" th:field="*{path}">
-                    </div>
-                    <div class="col-1">
-                        <label>Актив</label>
-                        <input type="checkbox" class="form-control form-control-sm" th:checked="*{isUse}">
                     </div>
 
                     <div class="col-3">
@@ -57,6 +49,11 @@
                     <div class="col-2">
                         <label>Обновить</label>
                         <input type="submit" class="form-control form-control-sm" value="Сохранить">
+                    </div>
+
+                    <div class="col-2">
+                        <label>Вернуться назад</label>
+                        <a href="/settings/path" class="btn btn-light btn-sm form-control form-control-sm">Отмена</a>
                     </div>
                 </div>
             </form>

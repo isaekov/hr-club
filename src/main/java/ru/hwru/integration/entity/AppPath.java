@@ -1,8 +1,6 @@
 package ru.hwru.integration.entity;
 
 
-import org.hibernate.annotations.ColumnDefault;
-
 import javax.persistence.*;
 
 @Entity

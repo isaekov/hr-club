@@ -7,7 +7,7 @@
             </a>
 
             <div class="dropdown-menu"  th:attr="aria-labelledby=${'dropdown'+path.key.id}" >
-                <a class="dropdown-item" th:href="${path.key.path+chiled.path}" th:each="chiled : ${path.value}" th:text="${chiled.name}" href="#"></a>
+                <a class="dropdown-item"  th:th:classappend="${path.key.path+chiled.path == url} ? 'text-bold' : ''" th:href="${path.key.path+chiled.path}" th:each="chiled : ${path.value}" th:text="${chiled.name}" href="#"></a>
             </div>
         </li>
     </ul>

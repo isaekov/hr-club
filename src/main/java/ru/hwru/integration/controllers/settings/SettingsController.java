@@ -31,7 +31,7 @@ public class SettingsController {
     @PostMapping("/path")
     public String appPathSubmit(@ModelAttribute AppPath appPath) {
         pathService.save(appPath);
-        return "redirect:/settings";
+        return "redirect:/settings/path";
     }
 
     @GetMapping("/path/edit/{id}")

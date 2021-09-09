@@ -11,17 +11,19 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import ru.hwru.integration.dto.FileInfo;
 import ru.hwru.integration.dto.upload.ResponseMessage;
+import ru.hwru.integration.entity.File;
 import ru.hwru.integration.entity.User;
 import ru.hwru.integration.repository.UserRepository;
 import ru.hwru.integration.service.auth.UserService;
 import ru.hwru.integration.service.upload.FileStorageService;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
 @Controller
 @RequestMapping("/file")
-@CrossOrigin("http://localhost:8080")
+
 public class FileUploadController {
 
     private final FileStorageService fileStorageService;
@@ -37,11 +39,7 @@ public class FileUploadController {
 
     @GetMapping
     public String index(Model model) {
-
         User user = userRepository.findByEmail(userService.getCurrentUser().getEmail());
-
-
-//        System.out.println(user.getFiles());
         model.addAttribute("files", user);
         return "upload/index";
     }
@@ -60,16 +58,8 @@ public class FileUploadController {
     }
 
     @GetMapping("/files")
-    public ResponseEntity<List<FileInfo>> getListFiles() {
-        List<FileInfo> fileInfos = fileStorageService.loadAll().map(path -> {
-            String filename = path.getFileName().toString();
-            String url = MvcUriComponentsBuilder
-                    .fromMethodName(FileUploadController.class, "getFile", path.getFileName().toString()).build().toString();
-
-            return new FileInfo(filename, url);
-        }).collect(Collectors.toList());
-
-        return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
+    public ResponseEntity<Set<File>> getListFiles() {
+        return ResponseEntity.status(HttpStatus.OK).body(fileStorageService.loadF());
     }
 
     @GetMapping("/files/{filename:.+}")

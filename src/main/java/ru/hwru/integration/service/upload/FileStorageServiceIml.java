@@ -7,17 +7,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import ru.hwru.integration.entity.File;
-import ru.hwru.integration.repository.FileRepository;
+import ru.hwru.integration.entity.UserFile;
+import ru.hwru.integration.repository.UserFileRepository;
 import ru.hwru.integration.service.auth.UserService;
+import ru.hwru.integration.tmp.StorageException;
 
 
 import javax.transaction.Transactional;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.*;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -25,34 +26,38 @@ import java.util.stream.Stream;
 public class FileStorageServiceIml implements FileStorageService {
 
 
-    private final Path root = Paths.get("uploads");
 
-    private final FileRepository fileRepository;
+    private final UserFileRepository userFileRepository;
 
     private final UserService userService;
 
-    public FileStorageServiceIml(FileRepository fileRepository, UserService userService) {
-        this.fileRepository = fileRepository;
+    public FileStorageServiceIml(UserFileRepository userFileRepository, UserService userService) {
+        this.userFileRepository = userFileRepository;
         this.userService = userService;
     }
 
-    public void init() {
-        try {
-            Files.createDirectories(root);
-        } catch (IOException e) {
-            throw new RuntimeException("Не удалось инициализировать папку для загрузки!");
+    private Path rootLocation() {
+
+        File file =  new File("uploads/" + this.userService.getCurrentUser().getId());
+        if (!file.exists()) {
+            if (file.mkdir()) {
+                // todo: release
+            }
         }
+
+        return Paths.get(file.getPath());
     }
+
 
     /**
      * Сохраняет файл на диск, и хранит реальное имя в базе
      */
     @Override
-    public void save(MultipartFile file) {
+    public void store(MultipartFile file) {
         try {
-            File prepareFile = prepareNameUserFile(file);
+            UserFile prepareFile = prepareNameUserFile(file);
             saveDiskFile(prepareFile, file);
-            fileRepository.save(prepareFile);
+            userFileRepository.save(prepareFile);
 
         } catch (Exception e) {
             throw new RuntimeException("Не удалось сохранить файл. Ошибка: " + e.getMessage());
@@ -78,27 +83,29 @@ public class FileStorageServiceIml implements FileStorageService {
 
     @Override
     public void deleteAll() {
-        FileSystemUtils.deleteRecursively(root.toFile());
+        FileSystemUtils.deleteRecursively(rootLocation().toFile());
     }
 
     @Override
     public Stream<Path> loadAll() {
         try {
-            return Files.walk(this.root.resolve(userService.getCurrentUser().getId()+""), 1).filter(path -> !path.equals(this.root)).map(this.root::relativize);
+            return Files.walk(this.rootLocation(), 1)
+                    .filter(path -> !path.equals(this.rootLocation()))
+                    .map(path -> this.rootLocation().relativize(path));
         } catch (IOException e) {
-            throw new RuntimeException("Could not load the files!");
+            throw new StorageException("Failed to read stored files", e);
         }
     }
 
 
-    public Set<File> loadF() {
+    public Set<UserFile> loadUserFile() {
         return userService.getCurrentUser().getFiles();
     }
 
 
-    private File prepareNameUserFile(MultipartFile file) {
+    private UserFile prepareNameUserFile(MultipartFile file) {
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-        return new File(
+        return new UserFile(
                 userService.getCurrentUser(),
                 file.getOriginalFilename(),
                 UUID.randomUUID() + "." + extension,
@@ -106,17 +113,10 @@ public class FileStorageServiceIml implements FileStorageService {
         );
     }
 
-    private void saveDiskFile(File prepareFile, MultipartFile file) throws Exception {
-        java.io.File directory = new java.io.File("uploads/" + prepareFile.getUser().getId());
-        if (!directory.exists()) {
-            if (directory.mkdir()) {
-                throw new NotDirectoryException("Ошбика при создание директории ");
-            }
-        }
+    private void saveDiskFile(UserFile prepareFile, MultipartFile file) throws Exception {
         Files.copy(
                 file.getInputStream(),
-                Paths.get(directory.getPath())
-                        .resolve(prepareFile.getGenerateName()),
+                this.rootLocation().resolve(prepareFile.getGenerateName()),
                 StandardCopyOption.REPLACE_EXISTING
         );
     }

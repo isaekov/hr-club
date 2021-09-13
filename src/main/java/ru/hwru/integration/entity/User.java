@@ -42,7 +42,7 @@ public class User  {
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<File> files = new HashSet<>();
+    private Set<UserFile> files = new HashSet<>();
 
     public User(){}
 
@@ -94,11 +94,11 @@ public class User  {
         this.roles = roles;
     }
 
-    public Set<File> getFiles() {
+    public Set<UserFile> getFiles() {
         return files;
     }
 
-    public void setFiles(Set<File> files) {
+    public void setFiles(Set<UserFile> files) {
         this.files = files;
     }
 }

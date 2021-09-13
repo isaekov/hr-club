@@ -8,17 +8,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
-import ru.hwru.integration.dto.FileInfo;
 import ru.hwru.integration.dto.upload.ResponseMessage;
-import ru.hwru.integration.entity.File;
+import ru.hwru.integration.entity.UserFile;
 import ru.hwru.integration.entity.User;
 import ru.hwru.integration.repository.UserRepository;
 import ru.hwru.integration.service.auth.UserService;
 import ru.hwru.integration.service.upload.FileStorageService;
-import java.util.List;
+
 import java.util.Set;
-import java.util.stream.Collectors;
 
 
 @Controller
@@ -48,7 +45,7 @@ public class FileUploadController {
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
         String message = "";
         try {
-            fileStorageService.save(file);
+            fileStorageService.store(file);
             message = "Uploaded the file successfully: " + file.getOriginalFilename();
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } catch (Exception e) {
@@ -58,8 +55,8 @@ public class FileUploadController {
     }
 
     @GetMapping("/files")
-    public ResponseEntity<Set<File>> getListFiles() {
-        return ResponseEntity.status(HttpStatus.OK).body(fileStorageService.loadF());
+    public ResponseEntity<Set<UserFile>> getListFiles() {
+        return ResponseEntity.status(HttpStatus.OK).body(fileStorageService.loadUserFile());
     }
 
     @GetMapping("/files/{filename:.+}")
@@ -67,8 +64,8 @@ public class FileUploadController {
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {
         Resource file = fileStorageService.load(filename);
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
 }

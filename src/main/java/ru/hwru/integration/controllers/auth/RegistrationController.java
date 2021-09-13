@@ -25,7 +25,6 @@ public class RegistrationController {
 
     @GetMapping("/registration")
     public String showRegistrationForm(){
-
         return "auth/registration";
     }
 

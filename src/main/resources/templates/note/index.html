@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<th:block layout:fragment="content">
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="sticky-top mb-5" style="top: 60px">
+                <div class="card " style="height: calc(100vh - 250px);">
+                    <div class="card-header">
+                        <h4 class="card-title">Список</h4>
+                    </div>
+                    <div class="card-body" >
+                        <div class="btn-group">
+                            <button type="button" class="btn  bg-indigo" data-toggle="modal" data-target="#modal-folder">
+                                Папка &nbsp;<i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" class="btn bg-indigo" data-toggle="modal" data-target="#modal-file">
+                                Файл &nbsp;<i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                        <!-- the events -->
+                        <div id="external-events">
+                            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                                <li class="nav-item" th:each="note : ${notes}">
+
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-folder"></i>
+                                        <p>
+                                            <i class="right fas fa-angle-left"></i>
+                                            <th:block th:utext="${note.getKey().getName()}"/>
+                                        </p>
+                                    </a>
+
+                                    <ul class="nav nav-treeview" th:each="n : ${note.getValue()}">
+                                        <li class="nav-item">
+                                            <a th:href="'note?file=' + ${n.getId()}" class="nav-link">
+                                                <i class="far fa-book-open nav-icon"></i>
+                                                <th:block th:utext="${n.getName()}"/>
+                                            </a>
+                                        </li>
+                                    </ul>
+
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+
+            </div>
+        </div>
+        <!-- /.col -->
+        <div class="col-md-9" style="min-height: 100%;" >
+            <textarea class="editor" style="min-height: 100%;"></textarea>
+        </div>
+        <!-- /.col -->
+    </div>
+
+
+
+    <div class="modal fade" id="modal-file" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <form th:action = "@{/add-file}" method="post" th:object="${noteFile}">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Создание папки</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                    <select th:field="*{parent}" class="custom-select">
+                        <option value="0">Создать в корне</option>
+                        <option th:each="folder : ${folders}" th:value="${folder.getId()}" th:text="${folder.getName()}"></option>
+                    </select>
+                </div>
+                    <div class="form-group">
+                        <input type="hidden" name="type" value="1">
+                        <input type="text" class="form-control" th:field="*{name}" placeholder="Название папки">
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-folder" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <form th:action = "@{/add-folder}" method="post" th:object="${noteFile}">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Создание папки</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <input type="hidden" th:field="*{parent}" value="0">
+                            <input type="hidden" th:field="*{type}" value="0">
+                            <input type="text" class="form-control" th:field="*{name}" placeholder="Название папки">
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <a href="" class="ildar">AAA</a>
+</th:block>
+
+<th:block layout:fragment="script">
+
+    <script src="/plugins/ckeditor5/ckeditor.js"></script>
+
+    <script>
+
+
+        let theEditor;
+
+        ClassicEditor.create( document.querySelector('.editor'), {
+            licenseKey: '',
+        } )
+        .then( editor => {
+
+            editor.editing.view.change( writer => {
+                writer.setStyle('min-height', '600px', editor.editing.view.document.getRoot());
+            } );
+
+            editor.model.document.on( 'change:data', () => {
+                $.ajax({
+                    type: "POST",
+                    url: "note-save",
+                    dataType: 'json',
+                    data: {val: editor.getData()},
+                    success: function (data) {
+
+                    }
+                })
+            } );
+
+            theEditor = editor;
+
+        } )
+        .catch( error => {
+            console.error( 'Oops, something went wrong!' );
+            console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
+            console.warn( 'Build id: fz06fshjxii9-jp0p4fmvpcfy' );
+            console.error( error );
+        } );
+
+        $(".editor").click(function () {
+            alert("sadfds")
+        })
+
+
+
+    </script>
+</th:block>
+<script>
+
+</script>
+</html>

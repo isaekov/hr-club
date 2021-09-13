@@ -1,80 +1,71 @@
 package ru.hwru.integration.service.auth;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.hwru.integration.dto.UserRegistration;
-import ru.hwru.integration.entity.Role;
+import ru.hwru.integration.entity.Authority;
+import ru.hwru.integration.repository.AuthorityRepository;
 import ru.hwru.integration.entity.User;
-import ru.hwru.integration.repository.UserRepository;
-import javax.transaction.Transactional;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.stream.Collectors;
+import ru.hwru.integration.repository.BlogUserRepository;
+
+import javax.management.relation.RoleNotFoundException;
+import java.util.Collections;
+import java.util.Optional;
 
 @Service
-@Transactional
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
+    private static final String DEFAULT_ROLE = "ROLE_USER";
+    private final BCryptPasswordEncoder bcryptEncoder;
+    private final BlogUserRepository blogUserRepository;
+    private final AuthorityRepository authorityRepository;
 
-    private final BCryptPasswordEncoder passwordEncoder;
-
-    private final UserRepository userRepository;
-
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+    public UserServiceImpl(BCryptPasswordEncoder bcryptEncoder, BlogUserRepository blogUserRepository, AuthorityRepository authorityRepository) {
+        this.bcryptEncoder = bcryptEncoder;
+        this.blogUserRepository = blogUserRepository;
+        this.authorityRepository = authorityRepository;
     }
 
 
     @Override
-    public User save(UserRegistration userRegistration) {
+    public Optional<User> findByEmail(String email) {
+        return blogUserRepository.findByUsername(email);
+    }
 
-        User user = new User();
-        user.setFirstName(userRegistration.getFirstName());
-        user.setLastName(userRegistration.getLastName());
-        user.setEmail(userRegistration.getEmail());
-        user.setPassword(passwordEncoder.encode(
-                userRegistration.getPassword()
-        ));
-        user.setRoles(Arrays.asList(
-                new Role("ROLE_USER"),
-                new Role("ROLE_ADMIN")
-        ));
-        return userRepository.save(user);
+    @Override
+    public User saveNewUser(User blogUser) throws RoleNotFoundException {
+
+        blogUser.setPassword(bcryptEncoder.encode(blogUser.getPassword()));
+        blogUser.setEnabled(true);
+        Authority authority = authorityRepository.findByAuthority(DEFAULT_ROLE);
+        blogUser.setAuthorities(Collections.singletonList(authority));
+        return this.blogUserRepository.saveAndFlush(blogUser);
 
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email);
-        if(user==null){
-            throw new UsernameNotFoundException("invalid user name or password");
+        Optional<User> blogUser = blogUserRepository.findByUsername(email);
+        if (blogUser.isPresent()) {
+            return blogUser.get();
+        } else {
+            throw new UsernameNotFoundException("No user found with username " + email);
         }
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), mapRolGrantedAuthorities(user.getRoles()));
-    }
-    private Collection<? extends GrantedAuthority> mapRolGrantedAuthorities(Collection<Role> roles){
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
-
     }
 
-    public User getCurrentUser() {
+    public User currentUser() {
 
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (principal instanceof UserDetails)
-            return userRepository.findByEmail(((UserDetails) principal).getUsername());
+//        if (authentication.getPrincipal() == "anonymousUser") {
+//            return null;
+//        }
 
-        // principal object is either null or represents anonymous user -
-        // neither of which our domain User object can represent - so return null
-        return null;
+
+
+        return blogUserRepository.findByUsername("").get();
     }
-
 }

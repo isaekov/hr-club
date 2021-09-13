@@ -2,19 +2,19 @@ package ru.hwru.integration.controllers.auth;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.HandlerMapping;
 
-import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 
 @Controller
-@RequestMapping("/auth")
 public class LoginController {
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Principal principal) {
+        if (principal != null) {
+            return "redirect:/"; // if user already logged in redirect back to root context
+        } else {
+            return "auth/login";
+        }
 
-        return "auth/login";
     }
-
 }

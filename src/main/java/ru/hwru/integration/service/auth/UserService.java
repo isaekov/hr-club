@@ -1,13 +1,17 @@
 package ru.hwru.integration.service.auth;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Service;
-import ru.hwru.integration.dto.UserRegistration;
 import ru.hwru.integration.entity.User;
 
-@Service
+import javax.management.relation.RoleNotFoundException;
+import java.util.Optional;
+
 public interface UserService extends UserDetailsService {
 
-    User getCurrentUser();
-    User save(UserRegistration userRegistration);
+    Optional<User> findByEmail(String email);
+
+    User saveNewUser(User blogUser) throws RoleNotFoundException;
+
+    User currentUser();
+
 }

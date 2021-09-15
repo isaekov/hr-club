@@ -69,6 +69,7 @@
 
     var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
         url: "/file/upload", // Set the url
+        maxFilesize: 50000,
         thumbnailWidth: 80,
         thumbnailHeight: 80,
         parallelUploads: 20,

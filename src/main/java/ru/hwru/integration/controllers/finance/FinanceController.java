@@ -1,6 +1,6 @@
 package ru.hwru.integration.controllers.finance;
 
-
+import ru.hwru.integration.util.dto.FormProduct;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +12,9 @@ import ru.hwru.integration.repository.finance.ProductCategoryRepository;
 import ru.hwru.integration.repository.finance.ProductRepository;
 import ru.hwru.integration.service.finance.FinanceService;
 
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -71,7 +74,7 @@ public class FinanceController {
     public String createList(Model model) {
 
         model.addAttribute("products", productRepository.findAll());
-        model.addAttribute("monthListProduct", new MonthListProduct());
+        model.addAttribute("monthListProduct", monthListProductRepository.findAll());
         return "finance/create-list";
     }
 

@@ -22,11 +22,45 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-sm-4" th:each="file : ${fil}">
-                        <a href="#" >[[${file.getOriginName()}]]
-                        <img th:src="'http://localhost:8080/gallery/files/' + ${file.getGenerateName()}" width="50" height="50">
-                        </a>
-                    </div>
+                    <ul class="mailbox-attachments d-flex align-items-stretch clearfix">
+                        <li th:each="file : ${fil}">
+
+
+                            <th:block th:switch="${file.getExtension()}">
+                                    <span class="mailbox-attachment-icon" th:case="'mp3'">
+                                        <i class="far fa-file-audio"></i>
+                                    </span>
+
+
+                                <span class="mailbox-attachment-icon has-img" th:case="'png'">
+                                       <img th:src="'http://localhost:8080/gallery/files/' + ${file.getGenerateName()}"
+                                            alt="File">
+                                    </span>
+
+                                <span class="mailbox-attachment-icon has-img" th:case="'jpg'">
+                                       <img th:src="'http://localhost:8080/gallery/files/' + ${file.getGenerateName()}"
+                                            alt="File">
+                                    </span>
+
+                                <span class="mailbox-attachment-icon" th:case="*">
+                                        <i class="far fa-file"></i>
+                                    </span>
+                            </th:block>
+
+
+                            <div class="mailbox-attachment-info">
+                                <span href="#" class="mailbox-attachment-name">[[${file.getOriginName()}]]</span>
+                                <span class="mailbox-attachment-size clearfix mt-1">
+<!--                          <span>1,245 KB</span>-->
+                          <a
+                                  th:href="'http://localhost:8080/gallery/files/' + ${file.getGenerateName()}"
+                                  class="btn btn-default btn-sm float-right" download="ildar.txt">
+                              <i class="fas fa-cloud-download-alt"></i>
+                          </a>
+                        </span>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

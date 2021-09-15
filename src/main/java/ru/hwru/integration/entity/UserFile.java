@@ -72,4 +72,15 @@ public class UserFile {
     public void setExtension(String extension) {
         this.extension = extension;
     }
+
+    @Override
+    public String toString() {
+        return "UserFile{" +
+                "id=" + id +
+                ", user=" + user +
+                ", originName='" + originName + '\'' +
+                ", generateName='" + generateName + '\'' +
+                ", extension='" + extension + '\'' +
+                '}';
+    }
 }

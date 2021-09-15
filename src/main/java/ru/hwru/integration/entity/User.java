@@ -1,10 +1,6 @@
 package ru.hwru.integration.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -46,7 +42,7 @@ public class User  {
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<File> files = new HashSet<>();
+    private Set<UserFile> files = new HashSet<>();
 
     public User(){}
 
@@ -98,11 +94,11 @@ public class User  {
         this.roles = roles;
     }
 
-    public Set<File> getFiles() {
+    public Set<UserFile> getFiles() {
         return files;
     }
 
-    public void setFiles(Set<File> files) {
+    public void setFiles(Set<UserFile> files) {
         this.files = files;
     }
 }

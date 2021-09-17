@@ -73,6 +73,9 @@ public class FinanceController {
     @GetMapping("/create-list")
     public String createList(Model model) {
 
+        monthListProductRepository.findAll().forEach(v -> {
+            System.out.println(v.getProduct().getName());
+        });
         model.addAttribute("products", productRepository.findAll());
         model.addAttribute("monthListProduct", monthListProductRepository.findAll());
         return "finance/create-list";
@@ -82,14 +85,9 @@ public class FinanceController {
     public String createListAdd(@RequestParam("product") List<MonthListProduct> monthListProducts) {
 
 //
-        monthListProducts.forEach(System.out::println);
+//        monthListProducts.forEach(System.out::println);
 
-//        System.out.println(monthListProducts.getProduct());
-//        for (MonthListProduct mont :
-//
-//                monthListProducts) {
-//            System.out.println(mont.getProduct());
-//        }
+
         return "redirect:/finance/create-list";
     }
 }

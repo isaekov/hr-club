@@ -5,7 +5,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <th:block layout:fragment="content">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-3">
             <div class="card card-secondary">
                 <div class="card-header">
                     <h3 class="card-title">Катергории</h3>
@@ -24,7 +24,7 @@
                         </div>
                     </form>
                     <hr>
-                    <table class="table table-bordered table-sm">
+                    <table class="table table-bordered table-sm table-responsive">
                         <thead>
                         <tr>
                             <td>ID</td>
@@ -35,7 +35,7 @@
                         <tbody>
                         <tr th:each="category : ${categoryList}">
                             <td class="col-1" th:text="${category.id}"></td>
-                            <td th:text="${category.name}"></td>
+                            <td class="col-1" th:text="${category.name}"></td>
                             <td class="text-center">
                                 <a th:href="'path/edit/'+${category.id}" class="btn-sm btn btn-outline-info">Редактировать</a>
                                 <a th:href="'/finance/category/delete/'+${category.id}" class="btn-sm btn btn-outline-danger">Удалить</a>
@@ -46,7 +46,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class="card card-gray-dark">
                 <div class="card-header">
                     <h3 class="card-title">Продукты</h3>
@@ -98,7 +98,7 @@
                             <td th:text="${product.price}"></td>
                             <td th:text="${product.category.name}"></td>
                             <td class="text-center">
-                                <a th:href="'path/edit/'+${product.id}" class="btn-sm btn btn-outline-info">Редактировать</a>
+                                <a th:href="'/finance/edit/'+${product.id}" class="btn-sm btn btn-outline-info">Редактировать</a>
                                 <a th:href="'/finance/product/delete/'+${product.id}" class="btn-sm btn btn-outline-danger">Удалить</a>
                             </td>
                         </tr>

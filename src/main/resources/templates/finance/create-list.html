@@ -9,6 +9,16 @@
             <div class="card card-secondary">
                 <div class="card-header">
                     <h3 class="card-title">Создание списка на месяц</h3>
+                    <div class="card-tools">
+                        <div class="input-group input-group-sm">
+                            <input type="date" class="form-control" placeholder="Search Mail">
+                            <div class="input-group-append">
+                                <div class="btn btn-primary">
+                                    <span>сохранить</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <table class="table table-bordered table-sm">
@@ -17,6 +27,7 @@
                             <td>ID</td>
                             <td>Дата</td>
                             <td>Количество</td>
+                            <td>Продукты</td>
                         </tr>
                         </thead>
                         <tbody>
@@ -24,6 +35,7 @@
                                 <td th:text="${mont.id}"></td>
                                 <td th:text="${mont.date}"></td>
                                 <td th:text="${mont.count}"></td>
+                                <td th:text="${mont.product.name}"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -37,10 +49,14 @@
                     <h3 class="card-title">Создание списка на месяц</h3>
                 </div>
                 <div class="card-body">
-                    <table class="table table-bordered table-sm">
+                    <table class="table table-bordered table-sm products">
                         <thead>
                         <tr>
-                            <td>ID</td>
+                            <td class="text-center">
+                                <div class="icheck-primary">
+                                    <div class="checkbox-toggle">Выбрать все</div>
+                                </div>
+                            </td>
                             <td>Названия</td>
                             <td>Цена</td>
                             <td>Действие</td>
@@ -49,9 +65,15 @@
                         <tbody>
                         <form th:action="@{/finance/create-list/add}">
                             <tr th:each="product : ${products}">
-                                <td th:text="${product.id}"></td>
+                                <td class="col-2 text-center">
+                                    <div class="icheck-primary">
+                                        <input type="checkbox" th:id="${product.id + 'checkbox'}">
+                                        <label th:for="${product.id + 'checkbox'}"></label>
+                                    </div>
+                                </td>
+                                <td class="col-1" th:text="${product.id}"></td>
                                 <td th:text="${product.name}"></td>
-                                <td th:text="${product.price}"></td>
+                                <td class="col-1" th:text="${product.price}"></td>
                                 <td>
                                     <a th:href="'/finance/create-list/add/' + ${product.id}">Добавить</a>
                                 </td>

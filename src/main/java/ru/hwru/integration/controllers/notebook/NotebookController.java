@@ -21,7 +21,7 @@ public class NotebookController {
 
     @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() {
-        System.out.println("hello world, I have just started up");
+
     }
 
 }

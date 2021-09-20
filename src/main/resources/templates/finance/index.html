@@ -59,9 +59,14 @@
                                 <input type="text" class="form-control form-control-sm" th:field="*{name}">
                             </div>
 
-                            <div class="col-3">
+                            <div class="col-2">
                                 <label>Сума</label>
                                 <input type="text" class="form-control form-control-sm" th:field="*{price}">
+                            </div>
+
+                            <div class="col-1">
+                                <label>Кол.</label>
+                                <input type="text" class="form-control form-control-sm" th:field="*{count}">
                             </div>
 
                             <div class="col-3">
@@ -87,6 +92,7 @@
                             <td>ID</td>
                             <td>Названия</td>
                             <td>Сума</td>
+                            <td>Количество</td>
                             <td>Категория</td>
                             <td>Действие</td>
                         </tr>
@@ -96,6 +102,7 @@
                             <td class="col-1" th:text="${product.id}"></td>
                             <td th:text="${product.name}"></td>
                             <td th:text="${product.price}"></td>
+                            <td th:text="${product.count} ?: 0"></td>
                             <td th:text="${product.category.name}"></td>
                             <td class="text-center">
                                 <a th:href="'/finance/edit/'+${product.id}" class="btn-sm btn btn-outline-info">Редактировать</a>

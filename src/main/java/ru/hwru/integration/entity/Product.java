@@ -18,7 +18,10 @@ public class Product {
     private String name;
 
     @Column(name = "price")
-    private int price;
+    private int price = 0;
+
+    @Column(name = "count", nullable = false, columnDefinition = "int default 0")
+    private int count;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -69,6 +72,14 @@ public class Product {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public ProductCategory getCategory() {

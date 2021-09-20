@@ -6,14 +6,14 @@
 <th:block layout:fragment="content">
     <div class="row">
         <div class="col-md-6">
-            <div class="card card-secondary">
+            <div class="card card-dark">
                 <div class="card-header">
                     <h3 class="card-title">Создание списка на месяц</h3>
                     <div class="card-tools">
                         <div class="input-group input-group-sm">
-                            <input type="date" class="form-control" placeholder="Search Mail">
+                            <input type="date" class="form-control" id="date-list">
                             <div class="input-group-append">
-                                <div class="btn btn-primary">
+                                <div class="btn btn-outline-light">
                                     <span>сохранить</span>
                                 </div>
                             </div>
@@ -31,12 +31,12 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="mont : ${monthListProduct}">
-                                <td th:text="${mont.id}"></td>
-                                <td th:text="${mont.date}"></td>
-                                <td th:text="${mont.count}"></td>
-                                <td th:text="${mont.product.name}"></td>
-                            </tr>
+                        <tr th:each="mont : ${monthListProduct}">
+                            <td th:text="${mont.id}"></td>
+                            <td th:text="${mont.date}"></td>
+                            <td th:text="${mont.count}"></td>
+                            <td th:text="${mont.product.name}"></td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -44,22 +44,34 @@
         </div>
 
         <div class="col-md-6">
-            <div class="card card-secondary">
+            <div class="card card-dark">
                 <div class="card-header">
                     <h3 class="card-title">Создание списка на месяц</h3>
+                    <div class="card-tools">
+                        <div class="input-group input-group-sm">
+                            <button type="button" id="add_select" class="btn btn-block btn-outline-light btn-sm">Добавить
+                                выбранное
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <table class="table table-bordered table-sm products">
                         <thead>
                         <tr>
-                            <td class="text-center">
+                            <td>
                                 <div class="icheck-primary">
-                                    <div class="checkbox-toggle">Выбрать все</div>
+                                    <div class="icheck-primary d-inline">
+                                        <input type="checkbox" id="checkboxPrimary3" class="checkbox-toggle">
+                                        <label for="checkboxPrimary3" style="font-weight: inherit;">
+                                            Выбрать все
+                                        </label>
+                                    </div>
                                 </div>
                             </td>
                             <td>Названия</td>
+                            <td>Количество</td>
                             <td>Цена</td>
-                            <td>Действие</td>
                         </tr>
                         </thead>
                         <tbody>
@@ -67,16 +79,14 @@
                             <tr th:each="product : ${products}">
                                 <td class="col-2 text-center">
                                     <div class="icheck-primary">
-                                        <input type="checkbox" th:id="${product.id + 'checkbox'}">
+                                        <input type="checkbox" class="list-all" th:attr="data-list_id=${product.id}"
+                                               th:id="${product.id + 'checkbox'}">
                                         <label th:for="${product.id + 'checkbox'}"></label>
                                     </div>
                                 </td>
-                                <td class="col-1" th:text="${product.id}"></td>
                                 <td th:text="${product.name}"></td>
+                                <td th:text="${product.count}"></td>
                                 <td class="col-1" th:text="${product.price}"></td>
-                                <td>
-                                    <a th:href="'/finance/create-list/add/' + ${product.id}">Добавить</a>
-                                </td>
                             </tr>
                         </form>
                         </tbody>
@@ -85,5 +95,39 @@
             </div>
         </div>
     </div>
+
+
 </th:block>
+
+<th:block layout:fragment="script">
+    <script>
+
+        $(function () {
+            //Enable check and uncheck all functionality
+            $('.checkbox-toggle').click(function () {
+                var clicks = $(this).data('clicks')
+                if (clicks) {
+                    $('.products input[type=\'checkbox\']').prop('checked', false)
+                    $('.checkbox-toggle .far.fa-check-square').removeClass('fa-check-square').addClass('fa-square')
+                } else {
+                    $('.products input[type=\'checkbox\']').prop('checked', true)
+                    $('.checkbox-toggle .far.fa-square').removeClass('fa-square').addClass('fa-check-square')
+                }
+                $(this).data('clicks', !clicks)
+            })
+        })
+
+        $("#add_select").on('click', function () {
+            let data = [];
+            $('.list-all').each(function (id) {
+               if ($(this).prop('checked')) {
+                   data.push($(this).data('list_id'));
+               }
+            })
+        });
+    </script>
+</th:block>
+<script>
+
+</script>
 </html>

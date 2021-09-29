@@ -31,7 +31,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .clearAuthentication(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login?logout")
-                .permitAll();
+                .permitAll()
+
+        .and()
+
+                .headers().frameOptions().disable()
+                .and()
+                .csrf().ignoringAntMatchers("/h2-console/**")
+                .and()
+                .cors().disable();
     }
 
 

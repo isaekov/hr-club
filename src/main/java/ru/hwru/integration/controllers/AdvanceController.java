@@ -30,8 +30,10 @@ public class AdvanceController {
     public Map<AppPath, List<AppPath>> set() {
 
         if (appPathMap == null || count > 10) {
+            count = 0;
             appPathMap = new LinkedHashMap<>();
-            for (AppPath app : appPathRepository.findAllByParentId(0)) {
+            List<AppPath> allByParentId = appPathRepository.findAllByParentId(0);
+            for (AppPath app : allByParentId) {
                 if(!appPathRepository.findAllByParentId(app.getId()).isEmpty()) {
                     appPathMap.put(
                             app,
@@ -40,6 +42,7 @@ public class AdvanceController {
                 }
             }
         }
+
         count++;
         return appPathMap;
     }

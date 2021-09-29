@@ -1,0 +1,3 @@
+2021-09-29 15:34:05 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM APP_PATH APP_PATH APP_PATH[*]"; SQL statement:
+SELECT * FROM APP_PATH APP_PATH APP_PATH [42000-200]

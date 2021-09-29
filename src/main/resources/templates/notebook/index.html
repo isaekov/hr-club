@@ -5,14 +5,15 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <th:block layout:fragment="content">
     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-xl">
-        Launch Extra Large Modal
+        Создать запись
     </button>
 
+    <br>
     <br>
 
 
     <div class="row">
-        <div class="col-lg-1 col-2" th:each="note : ${notes}">
+        <div class="col-lg-2 col-4" th:each="note : ${notes}">
             <!-- small box -->
             <div class="small-box bg-info">
                 <div class="inner">
@@ -20,8 +21,7 @@
 
                     <p class="cut-text" th:text="${note.getContent()}"></p>
                 </div>
-                <a th:href="${'/notebook/get/'+ note.id}" class="small-box-footer">More info <i
-                        class="fas fa-arrow-circle-right"></i></a>
+                <a th:href="${'/notebook/get/'+ note.id}" class="small-box-footer">Смотреть</a>
             </div>
         </div>
     </div>

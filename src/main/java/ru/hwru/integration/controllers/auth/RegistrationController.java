@@ -9,7 +9,6 @@ import ru.hwru.integration.dto.UserRegistration;
 import ru.hwru.integration.service.auth.UserService;
 
 @Controller
-@RequestMapping("/auth")
 public class RegistrationController {
 
     private final UserService userService;

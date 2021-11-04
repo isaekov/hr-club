@@ -10,7 +10,7 @@ import java.util.Set;
 
 
 @Entity
-@Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User  {
 
     @Id
@@ -39,10 +39,6 @@ public class User  {
 
     )
     private Collection<Role> roles = new HashSet<>();
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserFile> files = new HashSet<>();
 
     public User(){}
 
@@ -94,12 +90,6 @@ public class User  {
         this.roles = roles;
     }
 
-    public Set<UserFile> getFiles() {
-        return files;
-    }
 
-    public void setFiles(Set<UserFile> files) {
-        this.files = files;
-    }
 }
 

@@ -6,12 +6,14 @@ public class UserRegistration {
     private String lastName;
     private String email;
     private String password;
+    private String passwordConfirm;
 
-    public UserRegistration(String firstName, String lastName, String email, String password) {
+    public UserRegistration(String firstName, String lastName, String email, String password, String passwordConfirm) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.passwordConfirm = passwordConfirm;
     }
 
     public UserRegistration() {
@@ -47,5 +49,13 @@ public class UserRegistration {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
+
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
     }
 }

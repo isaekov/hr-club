@@ -8,7 +8,6 @@ import org.springframework.web.servlet.HandlerMapping;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-@RequestMapping("/auth")
 public class LoginController {
 
     @GetMapping("/login")

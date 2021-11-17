@@ -46,6 +46,19 @@
 </html>
 
 <style th:inline="text">
+    /* Change the white to any color */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active{
+        -webkit-box-shadow: 0 0 0 30px rgb(39, 40, 41) inset !important;
+    }
+
+    /*Change text in autofill textbox*/
+    input:-webkit-autofill{
+        -webkit-text-fill-color: rgb(255, 255, 255) !important;
+    }
+
     @import url(https://fonts.googleapis.com/css?family=Audiowide);
 
     ::-moz-selection {

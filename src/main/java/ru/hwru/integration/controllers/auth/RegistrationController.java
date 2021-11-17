@@ -31,6 +31,5 @@ public class RegistrationController {
     public String registerUserAccount(@ModelAttribute("user") UserRegistration userRegistration){
         userService.save(userRegistration);
         return "redirect:/";
-
     }
 }

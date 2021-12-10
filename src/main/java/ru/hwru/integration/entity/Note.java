@@ -23,6 +23,7 @@ public class Note {
 
     private int parent;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @OneToMany(fetch = FetchType.EAGER)

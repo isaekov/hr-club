@@ -122,3 +122,9 @@ Wrong user name or password [28000-200]
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:461)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
 	... 99 more
+2021-12-10 13:47:41 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "CONTENT VARCHAR(255)": "STRINGDECODE('<ol><li>\u0420\u0430\u0441\u0441\u044b\u043b\u043a\u0430 <strong>\u041a\u0443\u0440\u0430\u0442\u043e\u0440\u0443 ... (3505)"; SQL statement:
+update notes set content=?, name=?, parent=?, type=?, username=? where id=? [22001-200]
+2021-12-10 13:50:23 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "CONTENT VARCHAR(255)": "STRINGDECODE('<ol><li>\u0420\u0430\u0441\u0441\u044b\u043b\u043a\u0430 <strong>\u041a\u0443\u0440\u0430\u0442\u043e\u0440\u0443 ... (3505)"; SQL statement:
+update notes set content=?, name=?, parent=?, type=?, username=? where id=? [22001-200]

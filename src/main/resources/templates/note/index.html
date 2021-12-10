@@ -6,15 +6,16 @@
 <th:block layout:fragment="content">
 
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="sticky-top mb-5" style="top: 60px">
-                <div class="card " style="height: calc(100vh - 250px);">
+                <div class="card " style="min-height: 100%;">
                     <div class="card-header">
                         <h4 class="card-title">Список</h4>
                     </div>
-                    <div class="card-body" >
+                    <div class="card-body">
                         <div class="btn-group">
-                            <button type="button" class="btn  bg-indigo" data-toggle="modal" data-target="#modal-folder">
+                            <button type="button" class="btn  bg-indigo" data-toggle="modal"
+                                    data-target="#modal-folder">
                                 Папка &nbsp;<i class="fa fa-plus"></i>
                             </button>
                         </div>
@@ -27,78 +28,109 @@
                         <div id="external-events">
                             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                                 <li class="nav-item" th:each="note : ${notes}">
-
                                     <a href="#" class="nav-link">
                                         <i class="nav-icon fas fa-folder"></i>
                                         <p>
                                             <i class="right fas fa-angle-left"></i>
-                                            <th:block th:utext="${note.getKey().getName()}"/>
+                                            <th:block th:utext="${note?.getKey()?.getName()}"/>
                                         </p>
                                     </a>
 
-                                    <ul class="nav nav-treeview" th:each="n : ${note.getValue()}">
-                                        <li class="nav-item">
-                                            <a th:href="'note?file=' + ${n.getId()}" class="nav-link">
+                                    <ul class="nav nav-treeview"  th:each="n : ${note?.getValue()}">
+                                        <li class="nav-item" th:id="${n?.getId()}">
+                                            <a th:href="'note?file=' + ${n?.getId()}" class="nav-link">
                                                 <i class="far fa-book-open nav-icon"></i>
-                                                <th:block th:utext="${n.getName()}"/>
+                                                <th:block th:utext="${n?.getName()}"/>
                                             </a>
                                         </li>
                                     </ul>
-
                                 </li>
-
                             </ul>
                         </div>
                     </div>
-                    <!-- /.card-body -->
                 </div>
-                <!-- /.card -->
-
             </div>
         </div>
         <!-- /.col -->
-        <div class="col-md-9" style="min-height: 100%;" >
-            <textarea class="editor" style="min-height: 100%;"></textarea>
+        <div th:if="${note}" class="col-md-10" style="min-height: 100%;">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title" th:text="${note?.name}"></h3>
+
+                    <div class="card-tools">
+                        <a href="#" class="btn btn-tool">
+                            <i class="fas fa-pen" data-toggle="modal" data-target="#modal-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body" th:utext="${note?.content}">
+                </div>
+            </div>
         </div>
         <!-- /.col -->
     </div>
 
 
+    <div class="modal fade" id="modal-xl" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <form th:if="${note != null}" th:object="${note}" th:action="@{'/note/update/' + *{id}}"  method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="col-3">
+                            <input type="text"  th:field="*{name}" class="form-control" placeholder=".col-3">
+                        </div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <textarea class="editor" style="min-height: 100%;" th:field="*{content}"></textarea>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
     <div class="modal fade" id="modal-file" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-sm">
-            <form th:action = "@{/add-file}" method="post" th:object="${noteFile}">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Создание папки</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                    <select th:field="*{parent}" class="custom-select">
-                        <option value="0">Создать в корне</option>
-                        <option th:each="folder : ${folders}" th:value="${folder.getId()}" th:text="${folder.getName()}"></option>
-                    </select>
-                </div>
-                    <div class="form-group">
-                        <input type="hidden" name="type" value="1">
-                        <input type="text" class="form-control" th:field="*{name}" placeholder="Название папки">
+            <form th:action="@{/add-file}" method="post" th:object="${noteFile}">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Создание папки</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <select th:field="*{parent}" class="custom-select">
+                                <option value="0">Создать в корне</option>
+                                <option th:each="folder : ${folders}" th:value="${folder.getId()}"
+                                        th:text="${folder.getName()}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" name="type" value="1">
+                            <input type="text" class="form-control" th:field="*{name}" placeholder="Название папки">
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
                     </div>
                 </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
-                </div>
-            </div>
             </form>
         </div>
     </div>
 
     <div class="modal fade" id="modal-folder" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-sm">
-            <form th:action = "@{/add-folder}" method="post" th:object="${noteFile}">
+            <form th:action="@{/add-folder}" method="post" th:object="${noteFile}">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">Создание папки</h4>
@@ -122,7 +154,7 @@
             </form>
         </div>
     </div>
-    <a href="" class="ildar">AAA</a>
+    <!--    <a href="" class="ildar">AAA</a>-->
 </th:block>
 
 <th:block layout:fragment="script">
@@ -134,40 +166,44 @@
 
         let theEditor;
 
-        ClassicEditor.create( document.querySelector('.editor'), {
+        ClassicEditor.create(document.querySelector('.editor'), {
             licenseKey: '',
-        } )
-        .then( editor => {
-
-            editor.editing.view.change( writer => {
-                writer.setStyle('min-height', '600px', editor.editing.view.document.getRoot());
-            } );
-
-            editor.model.document.on( 'change:data', () => {
-                $.ajax({
-                    type: "POST",
-                    url: "note-save",
-                    dataType: 'json',
-                    data: {val: editor.getData()},
-                    success: function (data) {
-
-                    }
-                })
-            } );
-
-            theEditor = editor;
-
-        } )
-        .catch( error => {
-            console.error( 'Oops, something went wrong!' );
-            console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
-            console.warn( 'Build id: fz06fshjxii9-jp0p4fmvpcfy' );
-            console.error( error );
-        } );
-
-        $(".editor").click(function () {
-            alert("sadfds")
         })
+            .then(editor => {
+
+                editor.editing.view.change(writer => {
+                    writer.setStyle('min-height', '600px', editor.editing.view.document.getRoot());
+                });
+
+                editor.model.document.on('change:data', () => {
+                    $.ajax({
+                        type: "POST",
+                        url: "note-save",
+                        dataType: 'json',
+                        data: {val: editor.getData()},
+                        success: function (data) {
+
+                        }
+                    })
+                });
+
+                theEditor = editor;
+
+            })
+            .catch(error => {
+                console.error('Oops, something went wrong!');
+                console.error('Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:');
+                console.warn('Build id: fz06fshjxii9-jp0p4fmvpcfy');
+                console.error(error);
+            });
+
+        $(document).ready(function() {
+            let id = [[${paramId}]];
+            let li = $("#"+id);
+            li.parents('li').addClass('menu-is-opening menu-open')
+            li.find('a').addClass('text-info font-weight-bold')
+
+        });
 
 
 

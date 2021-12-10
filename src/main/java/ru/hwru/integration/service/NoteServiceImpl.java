@@ -18,6 +18,6 @@ public class NoteServiceImpl implements NoteService{
 
     @Override
     public List<Note> allFolder() {
-        return noteRepository.findAllByType(0);
+        return noteRepository.findAllByTypeOrderByIdAsc(0);
     }
 }

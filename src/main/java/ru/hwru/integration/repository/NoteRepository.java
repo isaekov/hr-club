@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface NoteRepository extends JpaRepository<Note, Integer> {
 
-    List<Note> findAllByType(int type);
+    List<Note> findAllByTypeOrderByIdAsc(int type);
 
     List<Note> findAllByParentAndType(int parent, int type);
 

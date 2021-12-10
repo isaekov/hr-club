@@ -3,15 +3,33 @@
     <ul class="navbar-nav">
         <li class="nav-item dropdown" >
             <a href="#"   class="nav-link dropdown-toggle border-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="far fa-circle nav-icon text-danger"></i>
                 блокнот
             </a>
-
             <div class="dropdown-menu"  >
                 <a href="/note" class="dropdown-item">записи</a>
-                <a href="/note" class="dropdown-item">новая запись</a>
             </div>
+        </li>
 
+        <li class="nav-item dropdown" >
+            <a href="#"  class="nav-link dropdown-toggle border-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="far fa-circle nav-icon text-success"></i>
+                таблицы
+            </a>
+            <div class="dropdown-menu"  >
+                <a href="/note" class="dropdown-item">новая</a>
+            </div>
+        </li>
 
+        <li class="nav-item dropdown" >
+            <a href="#"  class="nav-link dropdown-toggle border-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="far fa-circle nav-icon text-blue"></i>
+                органайзер
+            </a>
+            <div class="dropdown-menu"  >
+                <a href="/note" class="dropdown-item">почта</a>
+                <a href="/email/settings" class="dropdown-item">настройки</a>
+            </div>
         </li>
     </ul>
 
@@ -45,7 +63,7 @@
         </li>
 
         <li class="nav-item dropdown">
-            <a class="nav-link" href="#" data-toggle="dropdown" th:text="${settings}">
+            <a class="nav-link text-dark" href="#" data-toggle="dropdown" th:text="${settings}">
 
             </a>
 

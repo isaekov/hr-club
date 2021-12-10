@@ -1,21 +1,14 @@
 package ru.hwru.integration.controllers;
 
-import com.sun.istack.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.hwru.integration.entity.Note;
 import ru.hwru.integration.repository.NoteRepository;
 import ru.hwru.integration.validation.NoteFile;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class NoteController {
@@ -28,12 +21,12 @@ public class NoteController {
 
     @GetMapping("/note")
     public String note(@RequestParam(name = "file", defaultValue = "0")  final int file, Model model) {
-        List<Note> notes = noteRepository.findAllByType(0);
+        List<Note> notes = noteRepository.findAllByTypeOrderByIdAsc(0);
         model.addAttribute("noteFile", new NoteFile());
         model.addAttribute("folders", notes);
 
 
-        Map<Note, List<Note>> noteListMap = new HashMap<>();
+        Map<Note, List<Note>> noteListMap = new LinkedHashMap<>();
         for (Note note : notes) {
             noteListMap.put(note, noteRepository.findAllByParentAndType(note.getId(), 1));
         }
@@ -43,6 +36,7 @@ public class NoteController {
            note = noteRepository.findById(file);
         }
         model.addAttribute("note", note);
+        model.addAttribute("paramId", file);
 
         return "note/index";
     }
@@ -78,5 +72,14 @@ public class NoteController {
     @PostMapping("note-save")
     public String saveNote() {
         return "redirect:/note";
+    }
+
+    @PostMapping("note/update/{id}")
+    public String updateNote(@ModelAttribute("Note") Note note, @PathVariable int id) {
+        var dbNote = noteRepository.findById(id);
+        dbNote.setName(note.getName());
+        dbNote.setContent(note.getContent());
+        noteRepository.saveAndFlush(dbNote);
+        return "redirect:/note?file=" + note.getId();
     }
 }

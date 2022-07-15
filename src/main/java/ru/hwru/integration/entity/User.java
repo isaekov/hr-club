@@ -1,14 +1,12 @@
 package ru.hwru.integration.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.hwru.integration.entity.Authority;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import java.sql.Date;
 import java.util.Collection;
 
 @Data
@@ -17,27 +15,28 @@ import java.util.Collection;
 @SequenceGenerator(name = "user_seq_gen", sequenceName = "user_seq", initialValue = 10, allocationSize = 1)
 public class User implements UserDetails {
 
-    private static final int MIN_USERNAME_LENGTH = 3;
-    private static final int MIN_PASSWORD_LENGTH = 8;
-
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq_gen")
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Length(min = MIN_USERNAME_LENGTH, message = "Username must be at least " + MIN_USERNAME_LENGTH + " characters long")
-    @NotEmpty(message = "Please enter username")
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @JsonIgnore // just in case Jackson tries wants to betray us
-    @Length(min = MIN_PASSWORD_LENGTH, message = "Password must be at least " + MIN_PASSWORD_LENGTH + " characters long")
-    @NotEmpty(message = "Please enter the password")
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Transient
+    public String passwordConfirm;
+
     @Column(name = "enabled", nullable = false)
     private Boolean enabled;
+
+    public String name;
+
+    public Date lastLogin;
+
+
+
 
 
     @ManyToMany(cascade = CascadeType.REMOVE)
@@ -83,7 +82,6 @@ public class User implements UserDetails {
         return this.enabled;
     }
 
-
     public Long getId() {
         return id;
     }
@@ -112,14 +110,4 @@ public class User implements UserDetails {
         this.authorities = authorities;
     }
 
-    @Override
-    public String toString() {
-        return "BlogUser{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-//                ", posts=" + posts +
-                ", authorities=" + authorities +
-                '}';
-    }
 }

@@ -7,6 +7,6 @@ import ru.hwru.integration.entity.User;
 import java.util.Optional;
 
 @Repository
-public interface BlogUserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
 }

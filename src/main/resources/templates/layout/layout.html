@@ -1,48 +1,52 @@
-<html  xmlns:th="http://www.thymeleaf.org"
-       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-       lang="en">
+<!doctype html>
+<html lang="en" data-lt-installed="true" style="height: auto;">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>AdminLTE 3 | Blank Page</title>
-    <th:block th:replace ="fragments/head :: head"/>
+    {% include "fragments/style" %}
 </head>
-<body class="sidebar-collapse">
-<!-- Site wrapper -->
+<body class="sidebar-collapse" style="height: auto;">
+
 <div class="wrapper">
-    <th:block th:insert="fragments/nav :: nav"/>
-    <div class="content-wrapper">
+    {% include "fragments/nav" %}
+    <div class="content-wrapper" style="min-height: 326px;">
+
         <div class="content-header">
-        <div class="container-fluid">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Здесь должно быть что-то</h1>
+                        <h1 class="m-0"> Какото заголовок</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">аптека</a></li>
+                            <li class="breadcrumb-item"><a href="#">улица</a></li>
+                            <li class="breadcrumb-item active">фонарь</li>
+                        </ol>
                     </div>
                 </div>
             </div>
         </div>
-        </div>
         <section class="content">
-            <th:block layout:fragment="content"/>
+                {% block content %}
+
+                {% endblock %}
+
         </section>
     </div>
-
-
-
-<!--    &lt;!&ndash; Control Sidebar &ndash;&gt;-->
-<!--    <aside class="control-sidebar control-sidebar-dark">-->
-<!--        &lt;!&ndash; Control sidebar content goes here &ndash;&gt;-->
-<!--    </aside>-->
+    {% include "fragments/footer" %}
 </div>
 
-<!-- jQuery -->
+
 <script src="/plugins/jquery/jquery.min.js"></script>
 <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="/dist/js/adminlte.min.js"></script>
 <script src="/dist/js/demo.js"></script>
 <script src="/plugins/dropzone/min/dropzone.min.js"></script>
 
-<th:block layout:fragment="script"></th:block>
+
 </body>
 </html>

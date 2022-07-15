@@ -10,7 +10,7 @@ public interface UserService extends UserDetailsService {
 
     Optional<User> findByEmail(String email);
 
-    User saveNewUser(User blogUser) throws RoleNotFoundException;
+    User saveNewUser(User blogUser) throws Exception;
 
     User currentUser();
 

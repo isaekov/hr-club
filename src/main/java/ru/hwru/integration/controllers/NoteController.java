@@ -50,9 +50,7 @@ public class NoteController {
         note.setParent(noteFile.getParent());
         note.setUsername(principal.getName());
         noteRepository.saveAndFlush(note);
-        System.out.println(noteFile.getName());
         return "redirect:/note";
-
     }
 
     @PostMapping("/add-file")
@@ -64,7 +62,6 @@ public class NoteController {
         note.setParent(noteFile.getParent());
         note.setUsername(principal.getName());
         noteRepository.saveAndFlush(note);
-        System.out.println(noteFile.getName());
         return "redirect:/note";
 
     }
@@ -75,11 +72,13 @@ public class NoteController {
     }
 
     @PostMapping("note/update/{id}")
-    public String updateNote(@ModelAttribute("Note") Note note, @PathVariable int id) {
+    public String updateNote(@ModelAttribute("Note") Note note, @PathVariable int id, Principal principal) {
         var dbNote = noteRepository.findById(id);
         dbNote.setName(note.getName());
         dbNote.setContent(note.getContent());
+        dbNote.setUsername(principal.getName());
         noteRepository.saveAndFlush(dbNote);
         return "redirect:/note?file=" + note.getId();
     }
+
 }

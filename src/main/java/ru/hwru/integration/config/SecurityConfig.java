@@ -44,23 +44,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(
                         "/registration",
+                        "/custom/**",
                         "/plugins/**",
                         "/dist/**",
                         "/img/**",
-                        "/h2-console/**"
-                )
+                        "/"
+                ).permitAll()
 
 //                .antMatchers("/createNewPost/**", "/editPost/**").hasRole("USER")
 //                .antMatchers("/createNewPost/**", "/editPost/**", "/comment/**").hasRole("USER")
 //                .antMatchers("/deletePost/**").hasRole("USER")
-//                .antMatchers("/deletePost/**").hasRole("ADMIN")
-                .permitAll()
+                .antMatchers("/deletePost/**").hasRole("ADMIN")
+
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login").loginProcessingUrl("/login") // same as default implicit configuration
                 .usernameParameter("username").passwordParameter("password") // same as default implicit configuration
-                .defaultSuccessUrl("/").failureUrl("/login?error") // same as default implicit configuration
+                .defaultSuccessUrl("/").failureUrl("/login-error") // same as default implicit configuration
                 .permitAll()
                 .and()
                 .rememberMe().rememberMeParameter("remember-me")

@@ -11,8 +11,7 @@ public class Note {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "note_seq_gen")
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String username;

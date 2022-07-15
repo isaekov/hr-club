@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ProductController {
 
 
+
     @GetMapping
     public String list() {
 
@@ -21,5 +22,14 @@ public class ProductController {
     @ResponseBody
     public String detail(@RequestParam(required = false) String productId) {
         return "return " + productId;
+    }
+
+    @GetMapping("/create")
+    public String create() {
+        return template("create");
+    }
+
+    private String template(String template) {
+        return "admin/product/".concat(template);
     }
 }

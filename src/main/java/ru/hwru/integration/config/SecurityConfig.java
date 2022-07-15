@@ -48,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/plugins/**",
                         "/dist/**",
                         "/img/**",
+                        "/h2-console/**",
                         "/"
                 ).permitAll()
 

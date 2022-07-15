@@ -42,8 +42,30 @@
 
             <div class="col-5">
                 <label>Описание товара</label>
-                <textarea type="number" class="form-control" placeholder=""> </textarea>
+                <textarea type="number" class="form-control" placeholder=""></textarea>
             </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-3">
+                <div class="row">
+
+                    <div class="col-11">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="customFile" value="34">
+                            <label class="custom-file-label" for="customFile">Выбрать файл</label>
+                        </div>
+
+                    </div>
+
+                    <div class="col-1 mt2">
+                        <i class=" plus nav-icon fas fa-plus text-success mt-2"></i>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
     </div>
     <div class="card-footer">
@@ -51,108 +73,18 @@
     </div>
 </div>
 
-
-<div class="col-md-12">
-    <div class="card card-default">
-        <div class="card-header">
-            <h3 class="card-title">Dropzone.js <small><em>jQuery File Upload</em> like look</small></h3>
-        </div>
-        <div class="card-body">
-            <div id="actions" class="row">
-                <div class="col-lg-6">
-                    <div class="btn-group w-100">
-<span class="btn btn-success col fileinput-button dz-clickable">
-<i class="fas fa-plus"></i>
-<span>Add files</span>
-</span>
-                        <button type="submit" class="btn btn-primary col start">
-                            <i class="fas fa-upload"></i>
-                            <span>Start upload</span>
-                        </button>
-                        <button type="reset" class="btn btn-warning col cancel">
-                            <i class="fas fa-times-circle"></i>
-                            <span>Cancel upload</span>
-                        </button>
-                    </div>
-                </div>
-                <div class="col-lg-6 d-flex align-items-center">
-                    <div class="fileupload-process w-100">
-                        <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                            <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress=""></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="table table-striped files" id="previews">
-
-            </div>
-        </div>
-
-        <div class="card-footer">
-            Visit <a href="https://www.dropzonejs.com">dropzone.js documentation</a> for more examples and information about the plugin.
-        </div>
-    </div>
-
-</div>
+<style>
+    .plus {
+        cursor: pointer;
+    }
+</style>
 {% endblock %}
 
 {% block script %}
-    <script>
-
-        // DropzoneJS Demo Code Start
-        Dropzone.autoDiscover = false
-
-        // Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
-        var previewNode = document.querySelector("#template")
-        previewNode.id = ""
-        var previewTemplate = previewNode.parentNode.innerHTML
-        previewNode.parentNode.removeChild(previewNode)
-
-        var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-            url: "/target-url", // Set the url
-            thumbnailWidth: 80,
-            thumbnailHeight: 80,
-            parallelUploads: 20,
-            previewTemplate: previewTemplate,
-            autoQueue: false, // Make sure the files aren't queued until manually added
-            previewsContainer: "#previews", // Define the container to display the previews
-            clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
-        })
-
-        myDropzone.on("addedfile", function(file) {
-            // Hookup the start button
-            file.previewElement.querySelector(".start").onclick = function() { myDropzone.enqueueFile(file) }
-        })
-
-        // Update the total progress bar
-        myDropzone.on("totaluploadprogress", function(progress) {
-            document.querySelector("#total-progress .progress-bar").style.width = progress + "%"
-        })
-
-        myDropzone.on("sending", function(file) {
-            // Show the total progress bar when upload starts
-            document.querySelector("#total-progress").style.opacity = "1"
-            // And disable the start button
-            file.previewElement.querySelector(".start").setAttribute("disabled", "disabled")
-        })
-
-        // Hide the total progress bar when nothing's uploading anymore
-        myDropzone.on("queuecomplete", function(progress) {
-            document.querySelector("#total-progress").style.opacity = "0"
-        })
-
-        // Setup the buttons for all transfers
-        // The "add files" button doesn't need to be setup because the config
-        // `clickable` has already been specified.
-        document.querySelector("#actions .start").onclick = function() {
-            myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED))
-        }
-        document.querySelector("#actions .cancel").onclick = function() {
-            myDropzone.removeAllFiles(true)
-        }
-        // DropzoneJS Demo Code End
-
-    </script>
-<input type="file" multiple="multiple" class="dz-hidden-input" tabindex="-1" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">
+<script>
+    $(".plus").on("click", function () {
+        $(this).parent(".row").append($(this).parent(".row").clone())
+    })
+</script>
 {% endblock %}
 
